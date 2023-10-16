@@ -1,5 +1,4 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-#is the HTTPServer local to our machine or local to python/the virtual environment
 from views import get_all_animals
 
 
@@ -50,7 +49,10 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         # It's an if..else statement
         if self.path == "/animals":
-            response = get_all_animals
+            # In Python, this is a list of dictionaries
+            # In JavaScript, you would call it an array of objects
+            response = get_all_animals()
+
         else:
             response = []
 
@@ -78,9 +80,6 @@ class HandleRequests(BaseHTTPRequestHandler):
         """
         self.do_POST()
 
-#WHAT IS THE DIFFERENCE BETWEEN PUT AND POST?
-# POST = CREATES NEW RESOURCE OR UPDATING AN EXISTING RESOURCE
-# PUT = CREATES NEW RESOURCE OR UPDATING AN EXISTING RESOURCE IF IT DOESN'T EXIST AS A SEPARATE URL
 
 # This function is not inside the class. It is the starting
 # point of this application.
