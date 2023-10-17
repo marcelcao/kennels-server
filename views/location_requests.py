@@ -26,6 +26,23 @@ def get_single_location(id):
 
     return requested_location
 
+def create_location(location):
+    """Variable to create an location, if it exists"""
+    # Get the id value of the last location in the list
+    max_id = LOCATIONS[-1]["id"]
+
+    # Add 1 to whatever that number is
+    new_id = max_id + 1
+
+    # Add an `id` property to the locations dictionary
+    location["id"] = new_id
+
+    # Add the location dictionary to the list
+    LOCATIONS.append(location)
+
+    # Return the dictionary with `id` property added
+    return location
+
 
 def get_all_locations():
     """Function returning locations."""

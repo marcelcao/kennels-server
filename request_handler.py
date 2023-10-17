@@ -8,6 +8,8 @@ from views import get_all_employees
 from views import get_single_employee
 from views import get_all_customers
 from views import get_single_customer
+from views import create_animal
+from views import create_location
 
 
 # Here's a class. It inherits from another class.
@@ -108,15 +110,31 @@ class HandleRequests(BaseHTTPRequestHandler):
     # Here's a method on the class that overrides the parent's method.
     # It handles any POST request.
     def do_POST(self):
-        """Handles POST requests to the server
-        """
-        # Set response code to 'Created'
+        """Handles POST requests to the server"""
         self._set_headers(201)
-
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
-        response = f"received post request:<br>{post_body}"
-        self.wfile.write(response.encode())
+
+        # Convert JSON string to a Python dictionary
+        post_body = json.loads(post_body)
+
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
+
+        # Initialize new animal
+        new_animal = None
+        new_location = None
+
+        # Add a new animal to the list. Don't worry about
+        # the orange squiggle, you'll define the create_animal
+        # function next.
+        if resource == "animals":
+            new_animal = create_animal(post_body)
+            self.wfile.write(json.dumps(new_animal).encode())
+
+        if resource == "locations":
+            new_location = create_location(post_body)
+            self.wfile.write(json.dumps(new_location).encode())
 
     # Here's a method on the class that overrides the parent's method.
     # It handles any PUT request.
