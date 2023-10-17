@@ -141,11 +141,11 @@ class HandleRequests(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(new_location).encode())
         
         if resource == "employees":
-            new_location = create_employee(post_body)
+            new_employee = create_employee(post_body)
             self.wfile.write(json.dumps(new_employee).encode())
         
         if resource == "customers":
-            new_location = create_customer(post_body)
+            new_customer= create_customer(post_body)
             self.wfile.write(json.dumps(new_customer).encode())
 
     # Here's a method on the class that overrides the parent's method.
