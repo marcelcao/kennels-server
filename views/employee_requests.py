@@ -53,6 +53,16 @@ def delete_employee(id):
     if employee_index >= 0:
         EMPLOYEES.pop(employee_index)
 
+def update_employee(id, new_employee):
+    """Function to update employee"""
+    # Iterate the employeeS list, but use enumerate() so that
+    # you can access the index value of each item.
+    for index, employee in enumerate(EMPLOYEES):
+        if employee["id"] == id:
+            # Found the employee. Update the value.
+            EMPLOYEES[index] = new_employee
+            break
+
 def get_all_employees():
     """Function returning employees."""
     return EMPLOYEES
