@@ -83,3 +83,9 @@ SELECT
     a.name
 FROM customer a
 WHERE a.id = 2
+
+SELECT
+    a.id,
+    a.name
+FROM employee a
+WHERE a.id = 1
