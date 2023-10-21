@@ -89,3 +89,8 @@ SELECT
     a.name
 FROM employee a
 WHERE a.id = 1
+
+SELECT
+    c.email
+FROM customer c
+WHERE c.email = "jenna@solis.com"
