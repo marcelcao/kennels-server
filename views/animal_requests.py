@@ -141,6 +141,6 @@ def get_all_animals():
                             row['status'], row['location_id'],
                             row['customer_id'])
 
-            animals.append(animal.__dict__) # see the notes below for an explanation on this line of code.
+            animals.append(animal.__dict__)
 
     return animals
