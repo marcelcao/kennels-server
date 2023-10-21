@@ -71,10 +71,15 @@ SELECT
 FROM animal a
 WHERE a.id = 8
 
--- Get only the animal rows where the `id` field value is 3
 SELECT
     a.id,
     a.name,
     a.address
 FROM location a
+WHERE a.id = 2
+
+SELECT
+    a.id,
+    a.name
+FROM customer a
 WHERE a.id = 2

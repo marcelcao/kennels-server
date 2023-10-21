@@ -1,3 +1,7 @@
+import sqlite3
+import json
+from models import Customer
+
 CUSTOMERS = [
     {
         "id": 1,
@@ -7,18 +11,28 @@ CUSTOMERS = [
 
 # Function with a single parameter
 def get_single_customer(id):
-    """Variable to hold the found customer, if it exists"""
-    requested_customer = None
+    """Variable to hold a single customer if it exists"""
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
 
-    # Iterate the LOCATIONS list above. Very similar to the
-    # for..of loops you used in JavaScript.
-    for customer in CUSTOMERS:
-        # Dictionaries in Python use [] notation to find a key
-        # instead of the dot notation that JavaScript used.
-        if customer["id"] == id:
-            requested_customer = customer
+        # Use a ? parameter to inject a variable's value
+        # into the SQL statement.
+        db_cursor.execute("""
+        SELECT
+            a.id,
+            a.name
+        FROM customer a
+        WHERE a.id = ?
+        """, ( id, ))
 
-    return requested_customer
+        # Load the single result into memory
+        data = db_cursor.fetchone()
+
+        # Create an customer instance from the current row
+        customer = Customer(data['id'], data['name'])
+
+        return customer.__dict__
 
 def create_customer(customer):
     """Variable to create an customer, if it exists"""
@@ -65,5 +79,37 @@ def update_customer(id, new_customer):
 
 
 def get_all_customers():
-    """Function returning locations."""
-    return CUSTOMERS
+    """Function to get all customers"""
+    # Open a connection to the database
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+
+        # Just use these. It's a Black Box.
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute("""
+        SELECT
+            a.id,
+            a.name
+        FROM customer a
+        """)
+
+        # Initialize an empty list to hold all location representations
+        customers = []
+
+        # Convert rows of data into a Python list
+        dataset = db_cursor.fetchall()
+
+        # Iterate list of data returned from database
+        for row in dataset:
+
+            # Create an customer instance from the current row.
+            # Note that the database fields are specified in
+            # exact order of the parameters defined in the
+            # customer class above.
+            customer = Customer(row['id'], row['name'])
+
+            customers.append(customer.__dict__)
+
+    return customers
