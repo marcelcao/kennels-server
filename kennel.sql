@@ -94,3 +94,8 @@ SELECT
     c.email
 FROM customer c
 WHERE c.email = "jenna@solis.com"
+
+INSERT INTO `Animal` VALUES (null, "Daps", "Kennel", "Boxer", 2, 2);
+INSERT INTO `Location` VALUES (null, 'Nashville South', "101 Penn Ave");
+INSERT INTO `Employee` VALUES (null, "Leah Hoefling", "200 Success Way", 2);
+INSERT INTO `Customer` VALUES (null, "Emily Lemmon", "454 Mulberry Way", "emily@lemmon.com", "password");
