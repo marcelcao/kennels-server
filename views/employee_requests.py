@@ -54,20 +54,14 @@ def create_employee(employee):
     return employee
 
 def delete_employee(id):
-    """Function to delete an employee"""
-    # Initial -1 value for employee index, in case one isn't found
-    employee_index = -1
+    """Function to delete an animal"""
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        db_cursor = conn.cursor()
 
-    # Iterate the employeeS list, but use enumerate() so that you
-    # can access the index value of each item
-    for index, employee in enumerate(EMPLOYEES):
-        if employee["id"] == id:
-            # Found the employee. Store the current index.
-            employee_index = index
-
-    # If the employee was found, use pop(int) to remove it from list
-    if employee_index >= 0:
-        EMPLOYEES.pop(employee_index)
+        db_cursor.execute("""
+        DELETE FROM employee
+        WHERE id = ?
+        """, (id, ))
 
 def update_employee(id, new_employee):
     """Function to update employee"""
