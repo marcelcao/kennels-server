@@ -179,6 +179,7 @@ class HandleRequests(BaseHTTPRequestHandler):
     # It handles any PUT request.
 
     def do_PUT(self):
+        """Handles update requests to server"""
         self._set_headers(204)
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
@@ -186,10 +187,13 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         # Parse the URL
         (resource, id) = self.parse_url(self.path)
+        
+        # set default value of success
+        success = False
 
-        # Delete a single animal from the list
+        # Update
         if resource == "animals":
-            update_animal(id, post_body)
+            success = update_animal(id, post_body)
         
         if resource == 'customers':
             update_customer(id, post_body)
@@ -199,6 +203,12 @@ class HandleRequests(BaseHTTPRequestHandler):
         
         if resource == 'locations':
             update_location(id, post_body)
+
+        # handle the value of success
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
 
         # Encode the new animal and send in response
         self.wfile.write("".encode())
