@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+from urllib.parse import urlparse, parse_qs
 from views import get_all_animals
 from views import get_single_animal
 from views import get_all_locations
@@ -20,8 +21,8 @@ from views import update_animal
 from views import update_location
 from views import update_employee
 from views import update_customer
-from urllib.parse import urlparse, parse_qs
 from views import get_customer_by_email
+from views import get_animal_by_location
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
@@ -122,6 +123,9 @@ class HandleRequests(BaseHTTPRequestHandler):
             # see if the query dictionary has an email key
                 if query.get('email') and resource == 'customers':
                     response = get_customer_by_email(query['email'][0])
+                
+                if query.get('location_id') and resource == 'animals':
+                    response = get_animal_by_location(query['location_id'][0])
 
         self.wfile.write(json.dumps(response).encode())
     
