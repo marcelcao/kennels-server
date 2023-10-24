@@ -21,7 +21,9 @@ def get_single_employee(id):
         db_cursor.execute("""
         SELECT
             a.id,
-            a.name
+            a.name, 
+            a.address,
+            a.location_id
         FROM employee a
         WHERE a.id = ?
         """, ( id, ))
@@ -30,7 +32,7 @@ def get_single_employee(id):
         data = db_cursor.fetchone()
 
         # Create an location instance from the current row
-        employee = Employee(data['id'], data['name'])
+        employee = Employee(data['id'], data['name'], data['address'], data['location_id'])
 
         return employee.__dict__
 
@@ -90,7 +92,9 @@ def get_all_employees():
         db_cursor.execute("""
         SELECT
             a.id,
-            a.name
+            a.name, 
+            a.address,
+            a.location_id
         FROM employee a
         """)
 
@@ -107,8 +111,34 @@ def get_all_employees():
             # Note that the database fields are specified in
             # exact order of the parameters defined in the
             # Location class above.
-            employee = Employee(row['id'], row['name'])
+            employee = Employee(row['id'], row['name'], row['address'], row['location_id'])
 
             employees.append(employee.__dict__)
 
     return employees
+
+def get_employee_by_location(location_id):
+    """Query for customer email address"""
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute("""
+        select
+            a.id,
+            a.name, 
+            a.address,
+            a.location_id
+        from Employee a
+        WHERE a.location_id = ?
+        """, ( location_id, ))
+
+        employee_located = []
+        dataset = db_cursor.fetchall()
+
+        for row in dataset:
+            employee = Employee(row['id'], row['name'], row['address'], row['location_id'])
+            employee_located.append(employee.__dict__)
+
+    return employee_located
