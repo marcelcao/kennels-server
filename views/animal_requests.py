@@ -54,9 +54,7 @@ def get_single_animal(id):
         data = db_cursor.fetchone()
 
         # Create an animal instance from the current row
-        animal = Animal(data['id'], data['name'], data['breed'],
-                            data['status'], data['location_id'],
-                            data['customer_id'])
+        animal = Animal(data['id'], data['name'], data['breed'], data['status'], data['customer_id'], data['location_id'])
 
         return animal.__dict__
 

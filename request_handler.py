@@ -23,6 +23,7 @@ from views import update_employee
 from views import update_customer
 from views import get_customer_by_email
 from views import get_animal_by_location
+from views import get_employee_by_location
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
@@ -126,6 +127,9 @@ class HandleRequests(BaseHTTPRequestHandler):
                 
                 if query.get('location_id') and resource == 'animals':
                     response = get_animal_by_location(query['location_id'][0])
+                
+                if query.get('location_id') and resource == 'employees':
+                    response = get_employee_by_location(query['location_id'][0])          
 
         self.wfile.write(json.dumps(response).encode())
     
