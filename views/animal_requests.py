@@ -43,9 +43,9 @@ def get_single_animal(id):
             a.id,
             a.name,
             a.breed,
+            a.customer_id,
             a.status,
-            a.location_id,
-            a.customer_id
+            a.location_id
         FROM animal a
         WHERE a.id = ?
         """, ( id, ))
@@ -54,7 +54,7 @@ def get_single_animal(id):
         data = db_cursor.fetchone()
 
         # Create an animal instance from the current row
-        animal = Animal(data['id'], data['name'], data['breed'], data['status'], data['location_id'], data['customer_id'])
+        animal = Animal(data['id'], data['name'], data['breed'], data['customer_id'], data['status'], data['location_id'])
 
         return animal.__dict__
 
@@ -95,13 +95,13 @@ def update_animal(id, new_animal):
             SET
                 name = ?,
                 breed = ?,
+                customer_id = ?,
                 status = ?,
-                location_id = ?,
-                customer_id = ?
+                location_id = ?
         WHERE id = ?
         """, (new_animal['name'], new_animal['breed'],
-              new_animal['status'], new_animal['location_id'],
-              new_animal['customer_id'], id, ))
+              new_animal['customer_id'], new_animal['status'],
+              new_animal['location_id'], id, ))
 
         # Were any rows affected?
         # Did the client send an `id` that exists?
@@ -130,9 +130,9 @@ def get_all_animals():
             a.id,
             a.name,
             a.breed,
+            a.customer_id,
             a.status,
-            a.location_id,
-            a.customer_id
+            a.location_id
         FROM animal a
         """)
 
@@ -149,7 +149,7 @@ def get_all_animals():
             # Note that the database fields are specified in
             # exact order of the parameters defined in the
             # Animal class above.
-            animal = Animal(row['id'], row['name'], row['breed'], row['status'], row['location_id'], row['customer_id'])
+            animal = Animal(row['id'], row['name'], row['breed'], row['customer_id'], row['status'], row['location_id'])
 
             animals.append(animal.__dict__)
 
@@ -167,9 +167,9 @@ def get_animal_by_location(location_id):
             c.id,
             c.name,
             c.breed,
+            c.customer_id,
             c.status,
-            c.location_id,
-            c.customer_id
+            c.location_id
         from Animal c
         WHERE c.location_id = ?
         """, ( location_id, ))
@@ -178,7 +178,7 @@ def get_animal_by_location(location_id):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            animal = Animal(row['id'], row['name'], row['breed'], row['status'], row['location_id'], row['customer_id'])
+            animal = Animal(row['id'], row['name'], row['breed'], row['customer_id'], row['status'], row['location_id'])
             animal_located.append(animal.__dict__)
 
     return animal_located
@@ -195,9 +195,9 @@ def get_animal_by_status(status):
             c.id,
             c.name,
             c.breed,
+            c.customer_id,
             c.status,
-            c.location_id,
-            c.customer_id
+            c.location_id
         from Animal c
         WHERE c.status = ?
         """, ( status, ))
@@ -206,7 +206,7 @@ def get_animal_by_status(status):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            animal = Animal(row['id'], row['name'], row['breed'], row['status'], row['location_id'], row['customer_id'])
+            animal = Animal(row['id'], row['name'], row['breed'], row['customer_id'], row['status'], row['location_id'])
             animal_status.append(animal.__dict__)
 
     return animal_status
