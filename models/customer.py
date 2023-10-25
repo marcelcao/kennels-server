@@ -6,3 +6,7 @@ class Customer():
         self.address = address
         self.email = email
         self.password = password
+
+    def serialized(self):
+        """Only passes the non-private information"""
+        return {"name": self.name, "address": self.address, "email": self.email}

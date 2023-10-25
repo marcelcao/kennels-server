@@ -104,11 +104,34 @@ SELECT
     a.id,
     a.name,
     a.breed,
-    a.customer_id,
+    a.customer_id pet_customer_id,
     a.status,
     a.location_id,
     l.name location_name,
-    l.address location_address
+    l.address location_address,
+    c.id customer_id,
+    c.name customer_name,
+    c.address customer_address,
+    c.email customer_email,
+    c.password customer_password
 FROM Animal a
-JOIN Location l
+LEFT JOIN Location l
     ON l.id = a.location_id
+LEFT JOIN Customer c
+    ON c.id = a.customer_id
+
+SELECT 
+    a.id,
+    a.name,
+    a.breed,
+    a.customer_id pet_customer_id,
+    a.status,
+    a.location_id,
+    c.id customer_id,
+    c.name customer_name,
+    c.address customer_address,
+    c.email customer_email,
+    c.password customer_password
+FROM Animal a
+LEFT JOIN Customer c
+    ON c.id = a.customer_id
