@@ -99,3 +99,50 @@ INSERT INTO `Animal` VALUES (null, "Daps", "Kennel", "Boxer", 2, 2);
 INSERT INTO `Location` VALUES (null, 'Nashville South', "101 Penn Ave");
 INSERT INTO `Employee` VALUES (null, "Leah Hoefling", "200 Success Way", 2);
 INSERT INTO `Customer` VALUES (null, "Emily Lemmon", "454 Mulberry Way", "emily@lemmon.com", "password");
+
+SELECT
+    a.id,
+    a.name,
+    a.breed,
+    a.customer_id pet_customer_id,
+    a.status,
+    a.location_id,
+    l.name location_name,
+    l.address location_address,
+    c.id customer_id,
+    c.name customer_name,
+    c.address customer_address,
+    c.email customer_email,
+    c.password customer_password
+FROM Animal a
+LEFT JOIN Location l
+    ON l.id = a.location_id
+LEFT JOIN Customer c
+    ON c.id = a.customer_id
+
+SELECT 
+    a.id,
+    a.name,
+    a.breed,
+    a.customer_id pet_customer_id,
+    a.status,
+    a.location_id,
+    c.id customer_id,
+    c.name customer_name,
+    c.address customer_address,
+    c.email customer_email,
+    c.password customer_password
+FROM Animal a
+LEFT JOIN Customer c
+    ON c.id = a.customer_id
+
+SELECT 
+    e.id,
+    e.name, 
+    e.address,
+    e.location_id,
+    l.name location_name,
+    l.address location_address
+FROM employee e
+LEFT JOIN Location l
+    ON l.id = e.location_id

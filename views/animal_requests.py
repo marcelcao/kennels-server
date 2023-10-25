@@ -1,6 +1,8 @@
 import sqlite3
 import json
 from models import Animal
+from models import Locations
+from models import Customer
 
 ANIMALS = [
     {
@@ -43,8 +45,8 @@ def get_single_animal(id):
             a.id,
             a.name,
             a.breed,
-            a.status,
             a.customer_id,
+            a.status,
             a.location_id
         FROM animal a
         WHERE a.id = ?
@@ -54,7 +56,7 @@ def get_single_animal(id):
         data = db_cursor.fetchone()
 
         # Create an animal instance from the current row
-        animal = Animal(data['id'], data['name'], data['breed'], data['status'], data['customer_id'], data['location_id'])
+        animal = Animal(data['id'], data['name'], data['breed'], data['customer_id'], data['status'], data['location_id'])
 
         return animal.__dict__
 
@@ -95,13 +97,13 @@ def update_animal(id, new_animal):
             SET
                 name = ?,
                 breed = ?,
+                customer_id = ?,
                 status = ?,
-                location_id = ?,
-                customer_id = ?
+                location_id = ?
         WHERE id = ?
         """, (new_animal['name'], new_animal['breed'],
-              new_animal['status'], new_animal['location_id'],
-              new_animal['customer_id'], id, ))
+              new_animal['customer_id'], new_animal['status'],
+              new_animal['location_id'], id, ))
 
         # Were any rows affected?
         # Did the client send an `id` that exists?
@@ -130,10 +132,21 @@ def get_all_animals():
             a.id,
             a.name,
             a.breed,
+            a.customer_id pet_customer_id,
             a.status,
-            a.customer_id,
-            a.location_id
-        FROM animal a
+            a.location_id,
+            l.name location_name,
+            l.address location_address,
+            c.id customer_id,
+            c.name customer_name,
+            c.address customer_address,
+            c.email customer_email,
+            c.password customer_password
+        FROM Animal a
+        LEFT JOIN Location l
+            ON l.id = a.location_id
+        LEFT JOIN Customer c
+            ON c.id = a.customer_id
         """)
 
         # Initialize an empty list to hold all animal representations
@@ -149,7 +162,14 @@ def get_all_animals():
             # Note that the database fields are specified in
             # exact order of the parameters defined in the
             # Animal class above.
-            animal = Animal(row['id'], row['name'], row['breed'], row['status'], row['customer_id'], row['location_id'])
+            animal = Animal(row['id'], row['name'], row['breed'], row['customer_id'], row['status'], row['location_id'])
+            
+            # Create a Location instance from the current row
+            location = Locations(row['id'], row['location_name'], row['location_address'])
+            customer = Customer(row['customer_id'], row['customer_name'], row['customer_address'], row['customer_email'], row['customer_password'])
+            
+            animal.location = location.__dict__
+            animal.customer = customer.serialized()
 
             animals.append(animal.__dict__)
 
@@ -167,8 +187,8 @@ def get_animal_by_location(location_id):
             c.id,
             c.name,
             c.breed,
-            c.status,
             c.customer_id,
+            c.status,
             c.location_id
         from Animal c
         WHERE c.location_id = ?
@@ -178,7 +198,7 @@ def get_animal_by_location(location_id):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            animal = Animal(row['id'], row['name'], row['breed'], row['status'], row['customer_id'], row['location_id'])
+            animal = Animal(row['id'], row['name'], row['breed'], row['customer_id'], row['status'], row['location_id'])
             animal_located.append(animal.__dict__)
 
     return animal_located
@@ -195,8 +215,8 @@ def get_animal_by_status(status):
             c.id,
             c.name,
             c.breed,
-            c.status,
             c.customer_id,
+            c.status,
             c.location_id
         from Animal c
         WHERE c.status = ?
@@ -206,7 +226,7 @@ def get_animal_by_status(status):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            animal = Animal(row['id'], row['name'], row['breed'], row['status'], row['customer_id'], row['location_id'])
+            animal = Animal(row['id'], row['name'], row['breed'], row['customer_id'], row['status'], row['location_id'])
             animal_status.append(animal.__dict__)
 
     return animal_status

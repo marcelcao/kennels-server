@@ -11,3 +11,5 @@ class Animal():
         self.customer_id = customer_id
         self.status = status
         self.location_id = location_id
+        self.location = None
+        self.customer = None

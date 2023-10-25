@@ -1,6 +1,7 @@
 import sqlite3
 import json
 from models import Employee
+from models import Locations
 
 EMPLOYEES = [
     {
@@ -20,12 +21,12 @@ def get_single_employee(id):
         # into the SQL statement.
         db_cursor.execute("""
         SELECT
-            a.id,
-            a.name, 
-            a.address,
-            a.location_id
-        FROM employee a
-        WHERE a.id = ?
+            e.id,
+            e.name, 
+            e.address,
+            e.location_id
+        FROM employee e
+        WHERE e.id = ?
         """, ( id, ))
 
         # Load the single result into memory
@@ -84,12 +85,16 @@ def get_all_employees():
 
         # Write the SQL query to get the information you want
         db_cursor.execute("""
-        SELECT
-            a.id,
-            a.name, 
-            a.address,
-            a.location_id
-        FROM employee a
+        SELECT 
+            e.id,
+            e.name, 
+            e.address,
+            e.location_id,
+            l.name location_name,
+            l.address location_address
+        FROM employee e
+        LEFT JOIN Location l
+            ON l.id = e.location_id
         """)
 
         # Initialize an empty list to hold all employee representations
@@ -106,6 +111,9 @@ def get_all_employees():
             # exact order of the parameters defined in the
             # Location class above.
             employee = Employee(row['id'], row['name'], row['address'], row['location_id'])
+            location = Locations(row['id'], row['location_name'], row['location_address'])
+            
+            employee.location = location.__dict__
 
             employees.append(employee.__dict__)
 
@@ -120,12 +128,12 @@ def get_employee_by_location(location_id):
         # Write the SQL query to get the information you want
         db_cursor.execute("""
         select
-            a.id,
-            a.name, 
-            a.address,
-            a.location_id
-        from Employee a
-        WHERE a.location_id = ?
+            e.id,
+            e.name, 
+            e.address,
+            e.location_id
+        from Employee e
+        WHERE e.location_id = ?
         """, ( location_id, ))
 
         employee_located = []
