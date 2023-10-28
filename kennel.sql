@@ -146,3 +146,40 @@ SELECT
 FROM employee e
 LEFT JOIN Location l
     ON l.id = e.location_id
+
+
+
+SELECT 
+    l.id location,
+    l.name, 
+    l.address,
+    a.name animal_name,
+    a.location_id animal_location,
+    e.name employee_name,
+    e.location_id employee_location
+FROM Location l
+LEFT JOIN Animal a
+    ON location = animal_location
+LEFT JOIN Employee e
+    ON location = employee_location
+
+
+SELECT 
+    l.id location,
+    l.name, 
+    l.address,
+    a.name animal_name,
+    a.location_id animal_location
+FROM Location l
+LEFT JOIN Animal a
+    ON location = animal_location
+
+SELECT 
+    l.id location,
+    l.name, 
+    l.address,
+    e.name employee_name,
+    e.location_id employee_location
+FROM Location l
+LEFT JOIN Employee e
+    ON location = employee_location
