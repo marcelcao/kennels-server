@@ -28,13 +28,11 @@ def get_single_employee(id):
         FROM employee e
         WHERE e.id = ?
         """, ( id, ))
-
         # Load the single result into memory
         data = db_cursor.fetchone()
 
-        # Create an location instance from the current row
-        employee = Employee(data['id'], data['name'], data['address'], data['location_id'])
-
+        #Create an location instance from the current row
+        employee = Employee(data['id'], data['name'], data['address'], data['location_id'])     
         return employee.__dict__
 
 def create_employee(employee):
